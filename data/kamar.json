@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "namaKamar": "Kamar 1",
+    "harga": 500000,
+    "status": "kosong",
+    "gambar": "/kamar1.jpg",
+    "fasilitas": ["WiFi", "Kasur", "Kipas"]
+  },
+  {
+    "id": 2,
+    "namaKamar": "Kamar 2",
+    "harga": 600000,
+    "status": "kosong",
+    "gambar": "/kamar2.jpg",
+    "fasilitas": ["WiFi", "AC", "Lemari"]
+  },
+  {
+    "id": 3,
+    "namaKamar": "Kamar 3",
+    "harga": 550000,
+    "status": "terisi",
+    "gambar": "/kamar3.jpg",
+    "fasilitas": ["WiFi", "Kasur"]
+  },
+  {
+    "id": 4,
+    "namaKamar": "Kamar 4",
+    "harga": 700000,
+    "status": "kosong",
+    "gambar": "/kamar4.jpg",
+    "fasilitas": ["AC", "WiFi", "Kamar Mandi Dalam"]
+  },
+  {
+    "id": 5,
+    "namaKamar": "Kamar 5",
+    "harga": 650000,
+    "status": "terisi",
+    "gambar": "/kamar5.jpg",
+    "fasilitas": ["WiFi", "Meja Belajar"]
+  }
+]
