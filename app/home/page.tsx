@@ -2,8 +2,7 @@ import Link from 'next/link';
 import { promises as fs } from 'fs';
 import path from 'path';
 
-
-
+// Definisi interface yang jelas untuk TypeScript
 interface Kamar {
   id: number;
   namaKamar: string;
@@ -14,7 +13,7 @@ interface Kamar {
 }
 
 export default async function Home() {
-  // Baca data secara asynchronous
+  // Ambil data menggunakan path absolute dari root project
   const filePath = path.join(process.cwd(), 'data', 'kamar.json');
   const fileContent = await fs.readFile(filePath, 'utf-8');
   const daftarKamar: Kamar[] = JSON.parse(fileContent);
@@ -37,7 +36,7 @@ export default async function Home() {
       {/* Grid Kamar */}
       <div className="max-w-6xl mx-auto py-6 md:py-12 px-2 sm:px-6">
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
-          {daftarKamar.map((kamar) => {
+          {daftarKamar.map((kamar: Kamar) => {
             const isTerisi = kamar.status.toLowerCase() === 'terisi';
 
             return (
@@ -58,12 +57,12 @@ export default async function Home() {
                     </div>
 
                     <div className="flex items-baseline mb-4">
-                      <span className="text-sm md:text-2xl font-black text-slate-900">Rp {kamar.harga.toLocaleString()}</span>
+                      <span className="text-sm md:text-2xl font-black text-slate-900">Rp {kamar.harga.toLocaleString('id-ID')}</span>
                       <span className="text-[10px] text-slate-400 ml-1">/bln</span>
                     </div>
                     
                     <div className="flex flex-wrap gap-1">
-                      {kamar.fasilitas.map((f, i) => (
+                      {kamar.fasilitas.map((f: string, i: number) => (
                         <span key={i} className="bg-slate-50 text-slate-600 text-[10px] font-medium px-2 py-0.5 rounded border border-slate-200">
                           {f}
                         </span>
