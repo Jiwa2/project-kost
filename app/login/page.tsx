@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link'; // <-- Menghilangkan error build karena Link belum di-import
 
 interface KamarTerpilih {
   id: number;
@@ -42,7 +43,7 @@ export default function DashboardLoginPage() {
     if (confirm('Apakah Anda yakin ingin keluar dari panel dashboard?')) {
       localStorage.removeItem('kamar_terbooking');
       localStorage.removeItem('username_penyewa');
-      window.location.href = '/booking/1';
+      window.location.href = '/login'; // <-- Diubah agar mengarah kembali ke form login
     }
   };
 
@@ -117,18 +118,47 @@ export default function DashboardLoginPage() {
             <div className="bg-white border border-slate-200/60 rounded-2xl p-5 shadow-sm">
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Layanan Cepat</h3>
               <div className="grid grid-cols-3 gap-2 md:gap-4">
-                <button className="flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-emerald-50 rounded-xl border border-slate-100 hover:border-emerald-200 transition text-center group">
+                
+                {/* TOMBOL BAYAR SEWA (Pindah ke WhatsApp) */}
+                <button 
+                  onClick={() => {
+                    const nomorAdmin = "6285710022851";
+                    const pesanBayar = `Halo Admin Kost Nuansa, saya ingin konfirmasi pembayaran sewa kost:\n\n` +
+                                       `• Nama Penyewa: ${namaPenyewaFix}\n` +
+                                       `• Kamar: ${dataKamarFix.namaKamar}\n` +
+                                       `• Total Tagihan: Rp ${totalTagihan.toLocaleString('id-ID')}\n` +
+                                       `• Durasi Sewa: ${durasiBulan} Bulan\n\n` +
+                                       `Mohon informasi rekening pembayaran dan instruksi selanjutnya ya. Terima kasih!`;
+                    window.open(`https://wa.me/${nomorAdmin}?text=${encodeURIComponent(pesanBayar)}`, '_blank');
+                  }}
+                  className="flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-emerald-50 rounded-xl border border-slate-100 hover:border-emerald-200 transition text-center group"
+                >
                   <span className="text-lg md:text-xl mb-1 group-hover:scale-110 transition-transform">💳</span>
                   <span className="text-[10px] md:text-xs font-bold text-slate-700">Bayar Sewa</span>
                 </button>
-                <button className="flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-amber-50 rounded-xl border border-slate-100 hover:border-amber-200 transition text-center group">
+
+                {/* TOMBOL LAPOR RUSAK / KOMPLAIN (Pindah ke Halaman Form Komplain) */}
+                <Link 
+                  href="/komplain" 
+                  className="flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-amber-50 rounded-xl border border-slate-100 hover:border-amber-200 transition text-center group"
+                >
                   <span className="text-lg md:text-xl mb-1 group-hover:scale-110 transition-transform">🛠️</span>
                   <span className="text-[10px] md:text-xs font-bold text-slate-700">Lapor Rusak</span>
-                </button>
-                <button className="flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-blue-50 rounded-xl border border-slate-100 hover:border-blue-200 transition text-center group">
+                </Link>
+
+                {/* TOMBOL CHAT ADMIN */}
+                <button 
+                  onClick={() => {
+                    const nomorAdmin = "6285710022851";
+                    const pesanChat = `Halo Admin Kost Nuansa, saya ${namaPenyewaFix} dari ${dataKamarFix.namaKamar}. Ada hal yang ingin saya tanyakan...`;
+                    window.open(`https://wa.me/${nomorAdmin}?text=${encodeURIComponent(pesanChat)}`, '_blank');
+                  }}
+                  className="flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-blue-50 rounded-xl border border-slate-100 hover:border-blue-200 transition text-center group"
+                >
                   <span className="text-lg md:text-xl mb-1 group-hover:scale-110 transition-transform">💬</span>
                   <span className="text-[10px] md:text-xs font-bold text-slate-700">Chat Admin</span>
                 </button>
+
               </div>
             </div>
 
