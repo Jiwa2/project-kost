@@ -39,17 +39,22 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
   const bulanTerpilih = parseInt(durasi) || 1;
   const totalHargaAkhir = hargaKamar * bulanTerpilih;
 
+  // Teks string keterangan durasi untuk disimpan & dikirim ke WA
+  const labelDurasi = durasi === '12' ? '1 Tahun' : `${durasi} Bulan`;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // PERBAIKAN STRUKTUR DATA: Menyimpan data asli + hasil kalkulasi final
     const dataBookingUntukDashboard = {
-      id: parseInt(kamarId || '1'),
+      id: parseInt(kamarId || '1', 10),
       namaKamar: namaKamar,
-      harga: totalHargaAkhir, // Menyimpan total akumulasi durasi nyata ke dashboard
-      durasi: durasi, 
+      harga: hargaKamar,         // Tetap harga dasar per bulan (misal: 500000)
+      durasi: labelDurasi,       // Menyimpan teks rapi "3 Bulan" atau "1 Tahun"
       tanggalMasuk: tanggalMasuk,
       status: "terisi",
-      fasilitas: fasilitasKamar
+      fasilitas: fasilitasKamar,
+      totalTagihan: totalHargaAkhir // Menyimpan hasil perkiraan kalkulasi akhir di form booking
     };
     
     localStorage.setItem('kamar_terbooking', JSON.stringify(dataBookingUntukDashboard));
@@ -61,7 +66,7 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
                   `• No. WA: ${whatsapp}\n` +
                   `• Kamar: ${namaKamar} (ID: ${kamarId})\n` +
                   `• Tanggal Masuk: ${tanggalMasuk}\n` +
-                  `• Durasi Sewa: ${durasi === '12' ? '1 Tahun' : durasi + ' Bulan'}\n` +
+                  `• Durasi Sewa: ${labelDurasi}\n` +
                   `• Total Tagihan: Rp ${totalHargaAkhir.toLocaleString('id-ID')}\n\n` +
                   `Saya tahu nanti Username login saya adalah nama di atas. Mohon informasi password default dan langkah pembayaran selanjutnya ya, terima kasih!`;
 
@@ -159,7 +164,7 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
                 </span>
               </div>
               <div className="flex justify-between text-xs border-t border-slate-200/60 pt-2 mt-2 text-slate-600 font-bold">
-                <span>Estimasi Total ({durasi === '12' ? '1 Tahun' : durasi + ' Bln'}):</span>
+                <span>Estimasi Total ({labelDurasi}):</span>
                 <span className="text-emerald-600 text-sm font-black">
                   Rp {totalHargaAkhir.toLocaleString('id-ID')}
                 </span>

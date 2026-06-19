@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link'; // <-- Menghilangkan error build karena Link belum di-import
+import Link from 'next/link';
 
 interface KamarTerpilih {
   id: number;
@@ -11,16 +11,16 @@ interface KamarTerpilih {
   tanggalMasuk: string;
   status: string;
   fasilitas: string[];
+  totalTagihan?: number; // Kita tambahkan opsional properti ini
 }
 
 export default function DashboardLoginPage() {
-  // Gunakan state kosong di awal agar tidak memicu flicker data dummy saat reload
   const [namaPenyewa, setNamaPenyewa] = useState<string>('');
   const [kamar, setKamar] = useState<KamarTerpilih | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Menarik data riil hasil inputan user dari Formulir Booking
+    // Ambil data riil hasil inputan user dari Formulir Booking
     const dataSewa = localStorage.getItem('kamar_terbooking');
     const userLogin = localStorage.getItem('username_penyewa');
     
@@ -43,26 +43,27 @@ export default function DashboardLoginPage() {
     if (confirm('Apakah Anda yakin ingin keluar dari panel dashboard?')) {
       localStorage.removeItem('kamar_terbooking');
       localStorage.removeItem('username_penyewa');
-      window.location.href = '/login'; // <-- Diubah agar mengarah kembali ke form login
+      window.location.href = '/login';
     }
   };
 
-  // State default (Fallback aman) jika user belum pernah booking atau data storage kosong
+  // Fallback data aman jika localstorage kosong (sebagai proteksi awal)
   const dataKamarFix = kamar || {
     id: 1,
     namaKamar: "Kamar Melati (ID: 1)",
     harga: 1200000,
-    durasi: "1",
+    durasi: "1 Bulan",
     tanggalMasuk: "2026-06-25",
     status: "terisi",
-    fasilitas: ["AC", "KM Dalam", "Wifi"]
+    fasilitas: ["AC", "KM Dalam", "Wifi"],
+    totalTagihan: 1200000
   };
 
   const namaPenyewaFix = namaPenyewa || "Penyewa Kost";
 
-  // RUMUS DINAMIS: Harga Kamar x Durasi Sewa
-  const durasiBulan = parseInt(dataKamarFix.durasi || '1');
-  const totalTagihan = dataKamarFix.harga * durasiBulan;
+  // MENGAMBIL TOTAL TAGIHAN LANGSUNG DARI HASIL HITUNGAN FORM BOOKING SEBELUMNYA
+  // Jika karena suatu hal tidak ada di storage, baru pakai fallback (harga * 1)
+  const totalTagihan = dataKamarFix.totalTagihan ?? dataKamarFix.harga;
 
   if (loading) {
     return (
@@ -119,7 +120,7 @@ export default function DashboardLoginPage() {
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Layanan Cepat</h3>
               <div className="grid grid-cols-3 gap-2 md:gap-4">
                 
-                {/* TOMBOL BAYAR SEWA (Pindah ke WhatsApp) */}
+                {/* TOMBOL BAYAR SEWA */}
                 <button 
                   onClick={() => {
                     const nomorAdmin = "6285710022851";
@@ -127,7 +128,7 @@ export default function DashboardLoginPage() {
                                        `• Nama Penyewa: ${namaPenyewaFix}\n` +
                                        `• Kamar: ${dataKamarFix.namaKamar}\n` +
                                        `• Total Tagihan: Rp ${totalTagihan.toLocaleString('id-ID')}\n` +
-                                       `• Durasi Sewa: ${durasiBulan} Bulan\n\n` +
+                                       `• Durasi Sewa: ${dataKamarFix.durasi}\n\n` +
                                        `Mohon informasi rekening pembayaran dan instruksi selanjutnya ya. Terima kasih!`;
                     window.open(`https://wa.me/${nomorAdmin}?text=${encodeURIComponent(pesanBayar)}`, '_blank');
                   }}
@@ -137,7 +138,7 @@ export default function DashboardLoginPage() {
                   <span className="text-[10px] md:text-xs font-bold text-slate-700">Bayar Sewa</span>
                 </button>
 
-                {/* TOMBOL LAPOR RUSAK / KOMPLAIN (Pindah ke Halaman Form Komplain) */}
+                {/* TOMBOL LAPOR RUSAK */}
                 <Link 
                   href="/komplain" 
                   className="flex flex-col items-center justify-center p-3 bg-slate-50 hover:bg-amber-50 rounded-xl border border-slate-100 hover:border-amber-200 transition text-center group"
@@ -176,7 +177,7 @@ export default function DashboardLoginPage() {
                   </thead>
                   <tbody className="divide-y divide-slate-50">
                     <tr className="text-slate-700">
-                      <td className="py-2.5 font-medium">Sewa Awal ({durasiBulan} Bulan)</td>
+                      <td className="py-2.5 font-medium">Sewa Awal ({dataKamarFix.durasi})</td>
                       <td className="py-2.5">Rp {totalTagihan.toLocaleString('id-ID')}</td>
                       <td className="py-2.5 text-right">
                         <span className="bg-amber-50 text-amber-600 px-2 py-0.5 rounded-md font-bold text-[10px]">
@@ -206,7 +207,7 @@ export default function DashboardLoginPage() {
                 <div>
                   <h4 className="text-[10px] text-slate-400 font-bold uppercase">Mulai Masuk</h4>
                   <p className="text-sm font-bold text-slate-800 mt-0.5">
-                    {dataKamarFix.tanggalMasuk ? new Date(dataKamarFix.tanggalMasuk).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '25 Juni 2026'}
+                    {dataKamarFix.tanggalMasuk ? new Date(dataKamarFix.tanggalMasuk).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '20 Juni 2026'}
                   </p>
                 </div>
               </div>
