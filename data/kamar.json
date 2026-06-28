@@ -4,7 +4,7 @@
     "namaKamar": "Kamar 1",
     "harga": 500000,
     "status": "kosong",
-    "gambar": "/kamar1.jpg",
+    "gambar": "/images/kamar1.png",
     "fasilitas": ["WiFi", "Kasur", "Kipas"]
   },
   {
@@ -12,7 +12,7 @@
     "namaKamar": "Kamar 2",
     "harga": 600000,
     "status": "kosong",
-    "gambar": "/kamar2.jpg",
+    "gambar": "/images/kamar2.png",
     "fasilitas": ["WiFi", "AC", "Lemari"]
   },
   {
@@ -20,7 +20,7 @@
     "namaKamar": "Kamar 3",
     "harga": 550000,
     "status": "terisi",
-    "gambar": "/kamar3.jpg",
+    "gambar": "/images/kamar3.png",
     "fasilitas": ["WiFi", "Kasur"]
   },
   {
@@ -28,7 +28,7 @@
     "namaKamar": "Kamar 4",
     "harga": 700000,
     "status": "kosong",
-    "gambar": "/kamar4.jpg",
+    "gambar": "/images/kamar4.png",
     "fasilitas": ["AC", "WiFi", "Kamar Mandi Dalam"]
   },
   {
@@ -36,7 +36,7 @@
     "namaKamar": "Kamar 5",
     "harga": 650000,
     "status": "terisi",
-    "gambar": "/kamar5.jpg",
+    "gambar": "/images/kamar5.png",
     "fasilitas": ["WiFi", "Meja Belajar"]
   }
 ]
